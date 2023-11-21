@@ -9,7 +9,10 @@ import InputOption from "./InputOption";
 import Post from "./Post";
 import { db } from "./firebase";
 import firebase from 'firebase/compat/app';
+import { useSelector } from "react-redux";
+import { selectUser } from "./features/userSlice";
 const Feed = () => {
+  const user = useSelector(selectUser)
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState("");
   //connection to the database
@@ -27,10 +30,10 @@ const Feed = () => {
     e.preventDefault();
 
     db.collection("posts").add({
-      name: "Velizar Dabov",
-      description: "Test",
+      name:user.displayName,
+      description: user.email,
       message: input,
-      photo: "",
+      photo: user.photoUrl || '',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setInput('');
